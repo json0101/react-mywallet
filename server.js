@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3001
 app.use(express.static('build'));
 
 app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'path/to/your/index.html'), function(err) {
+    res.sendFile(path.join(__dirname, 'build/index.html'), function(err) {
       if (err) {
         res.status(500).send(err)
       }
@@ -14,5 +14,4 @@ app.get('/*', function(req, res) {
   })
 
 app.listen(PORT, console.log("Listening on port" + PORT));
-
 // //"start": "react-scripts start",
