@@ -42,7 +42,7 @@ function RegisterIncome(props: any) {
         let source = axios.CancelToken.source();
         let unmounted = false;
 
-        apiAxios.getAuth(`/catalogue/income-types`,source.token)
+        apiAxios.getAuth(`/catalogue/income-types/actives`,source.token)
             .then(x => {
                 if (x.status === 200 && !unmounted) {
                     let data: IIncomeType[] = x.data;

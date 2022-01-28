@@ -44,7 +44,7 @@ function RegisterExpense(props: any) {
         let source = axios.CancelToken.source();
         let unmounted = false;
 
-        apiAxios.getAuth(`/catalogue/expense-types`,source.token)
+        apiAxios.getAuth(`/catalogue/expense-types/actives`,source.token)
             .then(x => {
                 if (x.status === 200 && !unmounted) {
                     let data: IExpenseType[] = x.data;
