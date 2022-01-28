@@ -14,15 +14,15 @@ https://react-mywallet.herokuapp.com/login
 
 ## File Structure
 
-1. src
+src
   1.  components
-    1.1 catalogues
-    1.2 commons
-    1.3 dashboard
-    1.4 login
-    1.5 nav
-    1.6 routes
-    1.7 transactions
+    i catalogues
+    ii commons
+    iii dashboard
+    iiii login
+    iiiii nav
+    iiiiii routes
+    iiiiiii transactions
   2. enums
   3 helpers
   4 redux
