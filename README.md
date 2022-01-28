@@ -18,13 +18,11 @@ src
   1.  components
     * catalogues
     * commons
-    * 
     * dashboard
-    * 
     * login
     * nav
     * routes
     * transactions
   2. enums
-  3 helpers
-  4 redux
+  3. helpers
+  4. redux
