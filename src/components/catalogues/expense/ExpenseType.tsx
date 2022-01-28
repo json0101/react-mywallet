@@ -115,7 +115,7 @@ function ExpenseType() {
                 </Col>
             </Row>
             <br></br>
-            <Row>
+            <Row style={{ maxHeight: "500px", overflow: "scroll" }}>
                 <Col>
                     <Table striped bordered hover>
                         <thead>

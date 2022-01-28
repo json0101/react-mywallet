@@ -148,7 +148,7 @@ function HistoryExpense() {
                     </Col>
                 </Row>
             </Form>
-            <Row>
+            <Row style={{ maxHeight: "500px", overflow: "scroll" }}>
                 <Col>
                     <Table>
                         <thead>

@@ -49,7 +49,7 @@ function TransactionHistory() {
 
     return (
         <>
-            <Table >
+            <Table striped bordered hover>
                 <thead>
                     <tr>
                         <th>Type</th>

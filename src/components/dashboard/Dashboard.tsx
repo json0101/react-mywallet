@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Alert, Button, Card, Col, Container, Form, Row, Stack } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { apiAxios } from "../../helpers/ApiAxios";
 import { IExpense, IIncome } from "../transactions/interfaces/interface";
 import WalletChart from "./WalletChart";
 import { useDispatch, useSelector } from 'react-redux';
-import {saveIncome,saveExpense} from "../../redux/store";
+import { saveIncome, saveExpense } from "../../redux/store";
 import IncomeTypeChart from "./IncomeTypeChart";
 import ExpenseTypeChart from "./ExpenseTypeChar";
 import TransactionHistory from "./TransactionHistory";
@@ -19,8 +19,8 @@ const MySwal = withReactContent(Swal);
 
 function Dashboard() {
 
-    const {incomes, expenses} = useSelector((state:any) => state.transaction);
-    
+    const { incomes, expenses } = useSelector((state: any) => state.transaction);
+
     const [totalIncome, setTotalIncomes] = useState<number>(0);
     const [totalExpense, setTotalExpense] = useState<number>(0);
 
@@ -31,100 +31,100 @@ function Dashboard() {
     const [until, setUntil] = useState<Date>(new Date());
 
     const dispatch = useDispatch();
-    
-    const getIncomes = useCallback((from?: Date , until?: Date,source:any={}) => {
+
+    const getIncomes = useCallback((from?: Date, until?: Date, source: any = {}) => {
         const fromF = moment(from).format("yyyy-MM-DD");
         const untilF = moment(until).format("yyyy-MM-DD");
 
-        apiAxios.getAuth(`/transactions/incomes/?from=${fromF}&until=${untilF}`,source.token)
-        .then(x => {
-            
-            if(x.status === 200) {
-                let data: IIncome[] = x.data;
-                data = data.sort((a:IIncome,b:IIncome) => {
-                    return a.description > b.description? 1:-1; 
-                });
-                dispatch(saveIncome(data));
-            }
-        })
-        .catch(error => {
-            if(error.response.data?.message) {
-                MySwal.fire({
-                    title: error.response.data?.message,
-                    icon: "error"
-                });
-            }
-        });
+        apiAxios.getAuth(`/transactions/incomes/dashboard?from=${fromF}&until=${untilF}`, source.token)
+            .then(x => {
 
-    },[dispatch]);
+                if (x.status === 200) {
+                    let data: IIncome[] = x.data;
+                    data = data.sort((a: IIncome, b: IIncome) => {
+                        return a.description > b.description ? 1 : -1;
+                    });
+                    dispatch(saveIncome(data));
+                }
+            })
+            .catch(error => {
+                if (error.response.data?.message) {
+                    MySwal.fire({
+                        title: error.response.data?.message,
+                        icon: "error"
+                    });
+                }
+            });
+
+    }, [dispatch]);
 
     useEffect(() => {
         const d = new Date();
-        d.setDate(d.getDate()-30)
+        d.setDate(d.getDate() - 30)
         setFrom(d);
 
         let source = axios.CancelToken.source();
 
-        getIncomes(d,until,source);
+        getIncomes(d, until, source);
 
         return function () {
             source.cancel("Cancelling in cleanup");
         };
     }, [getIncomes, until]);
 
-    const getExpenses = useCallback((from?: Date, until?: Date, source:any={}) => {
-        
+    const getExpenses = useCallback((from?: Date, until?: Date, source: any = {}) => {
+
         const fromF = moment(from).format("yyyy-MM-DD");
         const untilF = moment(until).format("yyyy-MM-DD");
-        apiAxios.getAuth(`/transactions/expenses?from=${fromF}&until=${untilF}`,source.token)
-        .then(x => {
-            
-            if(x.status === 200) {
-                let data: IExpense[] = x.data;
-                data = data.sort((a:IExpense,b:IExpense) => {
-                    return a.description > b.description? 1:-1; 
-                });
-                dispatch(saveExpense(data));
-                
-            }
-        })
-        .catch(error => {
-            if(error.response.data?.message) {
-                MySwal.fire({
-                    title: error.response.data?.message,
-                    icon: "error"
-                });
-            }
-        });
-        
-    },[dispatch]);
+        apiAxios.getAuth(`/transactions/expenses/dashboard?from=${fromF}&until=${untilF}`, source.token)
+            .then(x => {
+
+                if (x.status === 200) {
+                    let data: IExpense[] = x.data;
+                    data = data.sort((a: IExpense, b: IExpense) => {
+                        return a.description > b.description ? 1 : -1;
+                    });
+                    dispatch(saveExpense(data));
+
+                }
+            })
+            .catch(error => {
+                if (error.response.data?.message) {
+                    MySwal.fire({
+                        title: error.response.data?.message,
+                        icon: "error"
+                    });
+                }
+            });
+
+    }, [dispatch]);
 
     useEffect(() => {
         const d = new Date();
-        d.setDate(d.getDate()-30);
+        d.setDate(d.getDate() - 30);
         setFrom(d);
 
         let source = axios.CancelToken.source();
 
-        getExpenses(d, until,source);
+        getExpenses(d, until, source);
 
         return function () {
             source.cancel("Cancelling in cleanup");
         };
-    }, [getExpenses, until ]);
+    }, [getExpenses, until]);
 
-    useEffect(()=> {
+    useEffect(() => {
         //console.log("Incomes",incomes);
-        if(incomes.length === 0)
+        if (incomes.length === 0)
             return;
 
-        const valuesIncome =  incomes.map((i:any) => i.value);
-        const totalIncome = valuesIncome.reduce((previous: number, current:number) => {
+        const valuesIncome = incomes.map((i: any) => i.value);
+        const totalIncome = valuesIncome.reduce((previous: number, current: number) => {
             return +previous + +current;
         });
 
-        const order = valuesIncome.sort((a:number, b:number) => {
-            return +a < +b? 1:-1;
+        const order = valuesIncome.sort((a: number, b: number) => {
+            return +a < +b ? 1 : -1;
         });
 
         const highest = order[0];
@@ -137,18 +137,18 @@ function Dashboard() {
 
     useEffect(() => {
         //console.log("Expense", expenses);
-        if(expenses.length === 0) {
+        if (expenses.length === 0) {
             return;
         }
 
-        const valuesExpense =  expenses.map((e:any) => e.value);
+        const valuesExpense = expenses.map((e: any) => e.value);
 
-        const totalExpense = valuesExpense.reduce((previous: number, current:number) => {
+        const totalExpense = valuesExpense.reduce((previous: number, current: number) => {
             return +previous + +current;
         });
 
-        const order = valuesExpense.sort((a:number, b:number) => {
-            return +a < +b? 1:-1;
+        const order = valuesExpense.sort((a: number, b: number) => {
+            return +a < +b ? 1 : -1;
         });
 
         //console.log("Orderrrrr",order);
@@ -163,7 +163,7 @@ function Dashboard() {
         getExpenses(from, until);
         getIncomes(from, until);
     }
-    
+
 
 
     return (
@@ -209,7 +209,7 @@ function Dashboard() {
                     </Col>
                 </Row>
 
-                <Row>
+                {/* <Row>
                     <Stack direction="horizontal" style={{alignItems: "stretch"}} gap={1}>
                         <Alert variant="primary">
                             Total incomes: {totalIncome.toFixed(2)} L.
@@ -224,9 +224,32 @@ function Dashboard() {
                             Highest expense: {+highestExpense.toFixed(2)} L.
                         </Alert>
                     </Stack>
+                </Row> */}
+
+                <Row>
+                    <Col lg={3} md={12}>
+                        <Alert variant="primary">
+                            Total incomes: {totalIncome.toFixed(2)} L.
+                        </Alert>
+                    </Col>
+                    <Col lg={3} md={12}>
+                        <Alert variant="danger">
+                            Total expenses: {totalExpense.toFixed(2)} L.
+                        </Alert>
+                    </Col>
+                    <Col lg={3} md={12}>
+                        <Alert variant="success">
+                            Highest income: {+highestIncome.toFixed(2)} L.
+                        </Alert>
+                    </Col>
+                    <Col lg={3} md={12}>
+                        <Alert variant="warning">
+                            Highest expense: {+highestExpense.toFixed(2)} L.
+                        </Alert>
+                    </Col>
                 </Row>
 
-                
+
                 <Row>
                     <Col>
                         <Card>
@@ -239,29 +262,29 @@ function Dashboard() {
                 </Row>
 
                 <Row className="mt-2">
-                    <Col>
+                    <Col lg={6} md={12}>
                         <Card>
                             <Card.Body>
                                 <Card.Title>Incomes by type</Card.Title>
-                                <IncomeTypeChart/>
+                                <IncomeTypeChart />
                             </Card.Body>
                         </Card>
                     </Col>
 
-                    <Col>
+                    <Col lg={6} md={12}>
                         <Card>
                             <Card.Body>
                                 <Card.Title>Expenses by type</Card.Title>
-                                <ExpenseTypeChart/>
+                                <ExpenseTypeChart />
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
 
-                <Row className="mt-2" style={{maxHeight:"500px", overflow:"scroll"}}>
+                <Row className="mt-2" >
                     <Col>
                         <Card>
-                            <Card.Body >
+                            <Card.Body style={{ maxHeight: "500px", overflow: "scroll" }} >
                                 <Card.Title>Transactions history</Card.Title>
                                 <TransactionHistory></TransactionHistory>
                             </Card.Body>

@@ -2,15 +2,15 @@ import React from 'react';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 import { useNavigate } from "react-router-dom";
-import {logout} from '../../redux/store';
+import { logout } from '../../redux/store';
 import { useDispatch } from 'react-redux';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function NavBar() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    
-    const logoutSubmit = (e:any) => {
+
+    const logoutSubmit = (e: any) => {
         e.preventDefault();
         dispatch(logout());
         localStorage.clear();
@@ -29,10 +29,10 @@ function NavBar() {
                             style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
-                            <NavLink className="nav-link"  to="/dashboard">Dashboard</NavLink>
-                            
+                            <NavLink className="nav-link" to="/dashboard">Dashboard</NavLink>
+
                             <NavDropdown title="Catalogue" id="navbarScrollingDropdown">
-                                
+
                                 <NavLink className="dropdown-item" to='/catalogues/expense-types'>
                                     Expense's Types
                                 </NavLink>
@@ -40,9 +40,9 @@ function NavBar() {
                                     Income's Types
                                 </NavLink>
                             </NavDropdown>
-                           
+
                             <NavDropdown title="Transactions" id="navbarScrollingDropdown2">
-                                
+
                                 <NavLink className="dropdown-item" to='/transaction/register-expense'>
                                     Register Expenses
                                 </NavLink>
@@ -60,7 +60,7 @@ function NavBar() {
                             </NavDropdown>
 
                             <Nav.Link href="/login" onClick={logoutSubmit}></Nav.Link>
-                            
+
                             <button className="logout nav-link" onClick={logoutSubmit}>
                                 Logout
                             </button>
