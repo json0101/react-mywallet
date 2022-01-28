@@ -16,7 +16,6 @@ function ExpenseType() {
     const [expensesType, setExpensesType] = useState<IExpenseType[]>([]);
     const [action, setAction] = useState<ActionFormType>(ActionFormType.New);
     const [idExpenseType, setIdExpenseType] = useState<number>(0);
-    const [refreshFields, setRefreshFields] = useState<boolean>(false);
     const [modalShow, setModalShow] = useState<boolean>(false);
     
 
@@ -33,9 +32,6 @@ function ExpenseType() {
     const paramsModal = (action: ActionFormType, idExpenseType: number) => {
         setAction(action);
         setIdExpenseType(idExpenseType);
-
-        if(action === ActionFormType.Edit)
-            setRefreshFields(!refreshFields);
 
         setModalShow(true);
     }
@@ -66,7 +62,6 @@ function ExpenseType() {
         <FormExpenseType
             action={action}
             id={idExpenseType}
-            refreshFields={refreshFields}
             refreshDataFromGrid={refreshData}
             onHide={() => setModalShow(false)}
         >

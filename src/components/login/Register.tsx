@@ -34,7 +34,7 @@ function Register() {
             password: password,
             name:name
         }).then(res => {
-            console.log(res);
+           // console.log(res);
 
             if(res.status === 201) {
 
@@ -47,7 +47,7 @@ function Register() {
                 
             }
         }).catch(error => {
-            console.log(error);
+            //console.log(error);
             if(error.response.data?.message) {
                 MySwal.fire({
                     title: error.response.data?.message,

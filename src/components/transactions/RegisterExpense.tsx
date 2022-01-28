@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { apiAxios } from "../../helpers/ApiAxios";
 import axios from "axios";
 import { IExpenseType } from "../catalogues/interfaces/interfaces";
@@ -8,6 +8,8 @@ import withReactContent from 'sweetalert2-react-content';
 import ActionFormType from "../../enums/ActionFormType";
 import { ExpenseModel } from "./models/model";
 import moment from 'moment';
+import ModalApp from "../commons/ModalApp";
+import FormExpenseType from "../catalogues/expense/FormExpenseType";
 
 const MySwal = withReactContent(Swal);
 
@@ -22,7 +24,7 @@ function RegisterExpense(props: any) {
     const [money, setMoney] = useState<any>(0.00);
     const [observations, setObservations] = useState("");
     const [date, setDate] = useState<Date | undefined>(new Date());
-    
+    const [modalShow, setModalShow] = useState<boolean>(false);
 
     const buttonCloseModalRef = useRef<any>(null);
 
@@ -33,14 +35,15 @@ function RegisterExpense(props: any) {
         if(action === ActionFormType.New)
             setShowActiveButton(false);
 
-        if(action === ActionFormType.Edit)
+        if(action === ActionFormType.Edit){
+
+            setTextButton("Update");
             setShowActiveButton(true);
+        }
         
     }, [action]);
 
-
-    useEffect(() => {
-        setTextButton("Save");
+    const getTypesExpenses = () => {
         let source = axios.CancelToken.source();
         let unmounted = false;
 
@@ -65,7 +68,11 @@ function RegisterExpense(props: any) {
                     });
                 }
             })
-    }, [setTextButton]);
+    }
+
+    useEffect(() => {
+        getTypesExpenses();
+    }, []);
 
     const onSubmit = (e: any) => {
         e.preventDefault();
@@ -182,6 +189,17 @@ function RegisterExpense(props: any) {
         setDate(new Date());
     }
 
+    const formIncomeType = (
+        <FormExpenseType
+            action={ActionFormType.New}
+            id={0}
+            refreshDataFromGrid={getTypesExpenses}
+            onHide={() => setModalShow(false)}
+        >
+
+        </FormExpenseType>
+    );
+    
     return (
         <>
             {
@@ -205,15 +223,20 @@ function RegisterExpense(props: any) {
                         <Row>
                             <Form.Group className="mb-3" controlId="formIncomes">
                                 <Form.Label>Expense Type</Form.Label>
-                                <Form.Select aria-label="Income Type" value={expenseType} onChange={(e) => setExpenseType(+e.target.value)}>
-                                    <option value={0}>Select an option</option>
+                                <Stack direction="horizontal" style={{alignItems: "stretch"}} gap={1}>
+                                
+                                
+                                    <Form.Select aria-label="Income Type" value={expenseType} onChange={(e) => setExpenseType(+e.target.value)}>
+                                        <option value={0}>Select an option</option>
 
-                                    {
-                                        expenseTypes.length > 0 ? expenseTypes.map(t => {
-                                            return <option key={t.id} value={t.id}>{t.description}</option>;
-                                        }) : []
-                                    }
-                                </Form.Select>
+                                        {
+                                            expenseTypes.length > 0 ? expenseTypes.map(t => {
+                                                return <option key={t.id} value={t.id}>{t.description}</option>;
+                                            }) : []
+                                        }
+                                    </Form.Select>
+                                    <Button variant="outline-success" onClick={() => setModalShow(true)}>+</Button>
+                                </Stack>
                             </Form.Group>
                         </Row>
 
@@ -257,6 +280,13 @@ function RegisterExpense(props: any) {
                     </Form>
                 </Col>
             </Row>
+            <ModalApp
+                show={modalShow}
+                headingText="New Type of Expense"
+                component = {formIncomeType}
+                onHide={() => setModalShow(false)}
+            >
+            </ModalApp>
         </>
     );
 }

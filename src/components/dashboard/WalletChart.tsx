@@ -82,8 +82,8 @@ function WalletChart() {
             values.push([d[i][0], valueAccumulate]);
         }
 
-        console.log("d", d);
-        console.log("v", values);
+       // console.log("d", d);
+        //console.log("v", values);
 
         
 

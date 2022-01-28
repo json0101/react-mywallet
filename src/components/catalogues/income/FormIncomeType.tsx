@@ -112,7 +112,7 @@ function FormIncomeType(props: any) {
                 }
             })
             .catch(error => {
-                console.log(error);
+               // console.log(error);
                 if(error.response.data?.message) {
                     MySwal.fire({
                         title: error.response.data?.message,

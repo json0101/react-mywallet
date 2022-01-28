@@ -16,10 +16,7 @@ function IncomeType() {
     const [incomeTypes, setIncomeTypes] = useState<IIncomeType[]>([]);
     const [action, setAction] = useState<ActionFormType>(ActionFormType.New);
     const [idIncomeType, setIdIncomeType] = useState<number>(0);
-    const [refreshFields, setRefreshFields] = useState<boolean>(false);
     const [modalShow, setModalShow] = useState<boolean>(false);
-    
-    
     
     useEffect(() => {
         let source = axios.CancelToken.source();
@@ -35,9 +32,6 @@ function IncomeType() {
     const paramsModal = (action: ActionFormType, idIncomeType: number) => {
         setAction(action);
         setIdIncomeType(idIncomeType);
-
-        if(action === ActionFormType.Edit)
-            setRefreshFields(!refreshFields);
 
         setModalShow(true);
     }
@@ -67,7 +61,6 @@ function IncomeType() {
         <FormIncomeType
             action={action}
             id={idIncomeType}
-            refreshFields={refreshFields}
             refreshDataFromGrid={refreshData}
             onHide={() => setModalShow(false)}
         >

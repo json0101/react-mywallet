@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { apiAxios } from "../../helpers/ApiAxios";
 import axios from "axios";
 import { IIncomeType } from "../catalogues/interfaces/interfaces";
@@ -9,6 +9,8 @@ import withReactContent from 'sweetalert2-react-content';
 import ActionFormType from "../../enums/ActionFormType";
 import { IncomeModel } from "./models/model";
 import moment from 'moment';
+import FormIncomeType from "../catalogues/income/FormIncomeType";
+import ModalApp from "../commons/ModalApp";
 
 const MySwal = withReactContent(Swal);
 
@@ -23,7 +25,8 @@ function RegisterIncome(props: any) {
     const [observations, setObservations] = useState("");
     const buttonCloseModalRef = useRef<any>(null);
     const [date, setDate] = useState<Date | undefined>(new Date());
-
+    const [modalShow, setModalShow] = useState<boolean>(false);
+    
     const {action=ActionFormType.New, id, refreshDataFromGrid} = props;
 
     useEffect(() => {
@@ -31,13 +34,18 @@ function RegisterIncome(props: any) {
         if(action === ActionFormType.New)
             setShowActiveButton(false);
 
-        if(action === ActionFormType.Edit)
+        if(action === ActionFormType.Edit){
+            setTextButton("Update");
             setShowActiveButton(true);
+        }
         
     }, [action]);
 
     useEffect(() => {
-        setTextButton("Save");
+        getTypesIncome();
+    },[]);
+
+    const getTypesIncome = () => {
 
         let source = axios.CancelToken.source();
         let unmounted = false;
@@ -62,8 +70,8 @@ function RegisterIncome(props: any) {
                         icon: "error"
                     });
                 }
-            })
-    },[setTextButton]);
+            });
+    }
 
     const onSubmit = (e: any) => {
         e.preventDefault();
@@ -178,6 +186,17 @@ function RegisterIncome(props: any) {
         setDate(new Date());
     }
 
+    const formIncomeType = (
+        <FormIncomeType
+            action={ActionFormType.New}
+            id={0}
+            refreshDataFromGrid={getTypesIncome}
+            onHide={() => setModalShow(false)}
+        >
+
+        </FormIncomeType>
+    );
+
     return (
         <>
             {
@@ -200,16 +219,21 @@ function RegisterIncome(props: any) {
                         <Row>
                             <Form.Group className="mb-3" controlId="formIncomes">
                                 <Form.Label>Income Type</Form.Label>
-                                <Form.Select aria-label="Income Type" value={incomeType} onChange={(e) => setIncomeType(+e.target.value)}>
-                                    <option value={0}>Select an option</option>
+                                <Stack direction="horizontal" style={{alignItems: "stretch"}} gap={1}>
+                                
+                                    <Form.Select aria-label="Income Type" value={incomeType} onChange={(e) => setIncomeType(+e.target.value)}>
+                                        <option value={0}>Select an option</option>
 
-                                    {
-                                        incomeTypes.length > 0 ? incomeTypes.map(t => {
-                                            return <option key={t.id} value={t.id}>{t.description}</option>;
-                                        }) : []
-                                    }
-                                </Form.Select>
+                                        {
+                                            incomeTypes.length > 0 ? incomeTypes.map(t => {
+                                                return <option key={t.id} value={t.id}>{t.description}</option>;
+                                            }) : []
+                                        }
+                                    </Form.Select>
+                                    <Button variant="outline-success" onClick={() => setModalShow(true)}>+</Button>
+                                </Stack>
                             </Form.Group>
+                            
                         </Row>
 
                         <Row>
@@ -250,6 +274,13 @@ function RegisterIncome(props: any) {
                     </Form>
                 </Col>
             </Row>
+            <ModalApp
+                show={modalShow}
+                headingText="New Type of Income"
+                component = {formIncomeType}
+                onHide={() => setModalShow(false)}
+            >
+            </ModalApp>
         </>
     )
 }
