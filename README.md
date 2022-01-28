@@ -16,13 +16,13 @@ https://react-mywallet.herokuapp.com/login
 
 src
   1.  components
-    i catalogues
-    ii commons
-    iii dashboard
-    iiii login
-    iiiii nav
-    iiiiii routes
-    iiiiiii transactions
+    * catalogues
+    * commons
+    * dashboard
+    * login
+    * nav
+    * routes
+    * transactions
   2. enums
   3 helpers
   4 redux
