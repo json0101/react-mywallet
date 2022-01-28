@@ -16,7 +16,7 @@ https://react-mywallet.herokuapp.com/login
 
 src
   1.  components
-    1.1 aa
+      ii. aa
   3. enums
   4. helpers
   5. redux
