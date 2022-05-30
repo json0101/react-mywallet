@@ -104,13 +104,13 @@ function RegisterIncome(props: any) {
         apiAxios.getAuth(`/transactions/incomes/${id}`)
             .then(x => {
                 if(x.status === 200) {
-                    const {income_type ,value, observations, active} = x.data;
+                    const {income_type ,value, observations, date, active} = x.data;
                     
-
                     setObservations(observations);
                     setActive(active);
                     setIncomeType(+income_type.id);
                     setMoney(+value);
+                    setDate(new Date(moment(date).format("YYYY-MM-DDTHH:mm:ss.sssZ")));
                 }
             })
             .catch(error => {

@@ -107,8 +107,6 @@ function RegisterExpense(props: any) {
             .then(x => {
                 if(x.status === 200) {
                     const { expense_type,value, observations, active, date} = x.data;
-                    
-                    
 
                     setObservations(observations);
                     setActive(active);

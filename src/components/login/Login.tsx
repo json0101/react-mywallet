@@ -14,11 +14,13 @@ function Login() {
 
     const [user, setUser] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
     const dispatch = useDispatch();
     const navigation = useNavigate();
 
     const onSubmit = (e: any) => {
         e.preventDefault();
+        setLoading(true);
 
         apiAxios.post('/auth/login', {
             user: user,
@@ -28,7 +30,9 @@ function Login() {
             dispatch(login(res.data));
             localStorage.setItem("auth",JSON.stringify(res.data));
             navigation('/dashboard');
+            setLoading(false)
         }).catch(error => {
+            setLoading(false);
             if(error.response.data?.message) {
                 MySwal.fire({
                     title: error.response.data?.message,
@@ -62,9 +66,16 @@ function Login() {
                                             Register
                                         </NavLink>
                                         <div className="text-center">
-                                            <Button variant="primary" type="submit">
-                                                Login
-                                            </Button>
+                                            {
+                                                loading?
+                                                <Button variant="primary" type="submit" disabled>
+                                                    Login
+                                                </Button> :
+                                                <Button variant="primary" type="submit" >
+                                                    Login
+                                                </Button>
+                                            }
+                                            
                                         </div>
                                     </Form>
                                 </Card.Body>
